@@ -20,7 +20,7 @@ public class Ship
     {
         bool isAdded;
         if (_containers.Count + 1 < _maxNumberOfContainers &&
-            container.GetWeight() + GetTotalWeight(_containers) < _maxWeight)
+            (container.GetWeight() + GetTotalWeight(_containers))/1000 < _maxWeight)
         {
             _containers.Add(container);
             isAdded = true;
@@ -37,7 +37,7 @@ public class Ship
     public void AddListOfContainers(List<IContainer> list)
     {
         if (_containers.Count + list.Count < _maxNumberOfContainers &&
-            GetTotalWeight(_containers) + GetTotalWeight(list) < _maxWeight)
+            (GetTotalWeight(_containers) + GetTotalWeight(list))/1000 < _maxWeight)
         {
             list.AddRange(list);
         }
@@ -50,6 +50,7 @@ public class Ship
     public bool RemoveContainer(IContainer container)
     {
         bool isRemoved = _containers.Remove(container);
+        Console.WriteLine(_containers.Count);
         if (isRemoved)
         {
             _maxWeight -= (int)container.GetWeight();
@@ -107,6 +108,11 @@ public class Ship
 
     public void PrintInfo()
     {
-        Console.WriteLine("Transport ship {max speed: "+_speed+", max weight: "+_maxWeight+", max number of containers: "+_maxNumberOfContainers+"}");
+        Console.WriteLine("Transport ship {max speed: "+_speed+", max weight: "+_maxWeight+", max number of containers: "+_maxNumberOfContainers+"}, containers:");
+        foreach (var VARIABLE in _containers)
+        {
+            VARIABLE.PrintInfo();
+        }
+        Console.WriteLine("end of containers on ship\n");
     }
 }
