@@ -59,7 +59,7 @@ public class UserServiceTest
         var userService = new UserService();
         Assert.Throws<ArgumentException>(() =>
         {
-            userService.AddUser("Dan", "Kwiatkowski", "email@gmailcom", DateTime.Parse("01.01.2000"), -1);
+            userService.AddUser("Dan", "Kwiatkowski", "email@gmail.com", DateTime.Parse("01.01.2000"), -1);
         });
     }
 }
