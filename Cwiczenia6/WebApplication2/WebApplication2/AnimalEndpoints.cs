@@ -48,12 +48,13 @@ public static class AnimalEndpoints
             return Results.Created($"students/{id}", new CreateAnimalDTOs((int)id, request));
         }
     }
-    private static IResult GetAnimals(IConfiguration configuration)
+    private static IResult GetAnimals(IConfiguration configuration, string orderBy = "Name")
     {
         var response = new List<GetAnimalsDetailsResponse>();
         using (var sqlConnection = new SqlConnection(configuration.GetConnectionString("Default")))
         {
-            var sqlCommand = new SqlCommand("SELECT * FROM Animals", sqlConnection);
+            var sqlCommandText = $"SELECT * FROM Animals ORDER BY {orderBy}";
+            var sqlCommand = new SqlCommand(sqlCommandText, sqlConnection);
             sqlCommand.Connection.Open();
             var reader = sqlCommand.ExecuteReader();
             while (reader.Read())
@@ -70,6 +71,7 @@ public static class AnimalEndpoints
         }
         return Results.Ok(response);
     }
+
     private static IResult GetAnimal(IConfiguration configuration, int id)
     {
         using var sqlConnection = new SqlConnection(configuration.GetConnectionString("Default"));
