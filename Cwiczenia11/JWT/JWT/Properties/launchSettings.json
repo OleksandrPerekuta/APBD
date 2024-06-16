@@ -27,5 +27,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     }
-  }
+  },"ConnectionStrings":{
+  "DefaultConnection": "Data Source=localhost;Initial Catalog=newCatalog;User ID=sa;Password=1234QWERTYasdf;Encrypt=False"
+}
 }

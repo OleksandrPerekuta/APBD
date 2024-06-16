@@ -19,8 +19,8 @@ namespace JWT.Controllers
         [HttpGet("exception")]
         public IActionResult ThrowException()
         {
-            throw new Exception("No tragedia :(");
-            return Ok();
+            //throw new Exception("No tragedia :(");
+            return Ok("Autoryzacja niepotrzebna");
         }
     }
 }

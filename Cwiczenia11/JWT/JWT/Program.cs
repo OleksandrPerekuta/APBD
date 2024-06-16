@@ -1,9 +1,10 @@
-using JWT.Extensions;
-using Microsoft.AspNetCore.Diagnostics;
+using JWT.Context;
+using JWT.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Diagnostics;
-using System.Reflection.PortableExecutable;
 using System.Text;
+using JWT.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
@@ -25,7 +26,13 @@ builder.Services.AddAuthentication().AddJwtBearer(opt =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]!))
     };
 });
-// ===
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
 
 var app = builder.Build();
 
@@ -36,18 +43,17 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// === Uruchom autoryzacje dla wyznaczonych koncowek
+app.UseAuthentication();
 app.UseAuthorization();
-// ===
 
 app.MapControllers();
 
 // === Przykladowy, prosty middleware
 app.Use(async (context, next) =>
 {
-    Console.WriteLine("Hello world");
-    await next(context);
-    Console.WriteLine("Hello world 2");
+    Console.WriteLine("Request received");
+    await next();
+    Console.WriteLine("Response sent");
 });
 // ===
 
